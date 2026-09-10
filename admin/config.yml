@@ -1,0 +1,52 @@
+# Hannah Keown Homes dashboard
+#
+# The initial sign-in uses a GitHub fine-grained personal access token. Give
+# Hannah repository access, then have her choose “Sign In with Token” at /admin.
+# OAuth can be added later by deploying Sveltia CMS Authenticator and adding its
+# URL as backend.base_url.
+backend:
+  name: github
+  repo: twinlakeswebco/hannahkeownhomes
+  branch: main
+  auth_methods: [token]
+  commit_messages:
+    update: 'Update listings'
+    uploadMedia: 'Upload listing photo {{path}}'
+
+media_folder: uploads/listings
+public_folder: uploads/listings
+
+media_libraries:
+  default:
+    config:
+      max_file_size: 3145728
+      slugify_filename: true
+
+collections:
+  - name: site_content
+    label: Listings
+    files:
+      - name: current_listings
+        label: Current Listings
+        file: data/listings.json
+        fields:
+          - name: listings
+            label: Listings
+            widget: list
+            label_singular: Listing
+            summary: '{{fields.address}} - {{fields.price}}'
+            fields:
+              - { name: active, label: Show on homepage, widget: boolean, default: true }
+              - { name: status, label: Status, widget: select, options: [Active, Pending, Sold], default: Active }
+              - { name: address, label: Street address, widget: string }
+              - { name: city, label: City, widget: string }
+              - { name: county, label: County, widget: string }
+              - { name: state, label: State, widget: string, default: KY }
+              - { name: zip, label: ZIP code, widget: string, required: false }
+              - { name: price, label: Price, widget: string, hint: 'Example: $310,000' }
+              - { name: beds, label: Bedrooms, widget: number, value_type: int, required: false }
+              - { name: baths, label: Bathrooms, widget: number, value_type: float, required: false }
+              - { name: sqft, label: Square feet, widget: number, value_type: int, required: false }
+              - { name: description, label: Short description, widget: text, required: false, hint: 'Optional. Shown on the listing card.' }
+              - { name: image, label: Cover photo, widget: image }
+              - { name: url, label: Listing link, widget: string, required: false, hint: 'Optional link to the brokerage or MLS listing.' }
