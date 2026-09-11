@@ -4,9 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Current Listings | Hannah Keown, REALTOR®</title>
+<meta name="description" content="Browse current homes and properties listed by Hannah Keown across Central Kentucky, including Leitchfield, Clarkson, Caneyville, and Grayson County.">
+<meta name="keywords" content="Central Kentucky homes for sale, Leitchfield KY listings, Clarkson KY listings, Caneyville KY homes, Grayson County real estate, Kentucky REALTOR">
+<link rel="canonical" href="https://www.hannahkeownhomes.com/listings/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../site.css">
 <style>
 :root {
   --bg: #d8e2ec;
@@ -241,11 +245,41 @@ footer.credit a:hover{color:var(--navy);}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#content">Skip to main content</a>
+<nav class="site-nav" aria-label="Primary navigation">
+  <a class="brand" href="../"><strong>Hannah Keown, REALTOR®</strong><span>Schuler Bauer ERA · Central Kentucky</span></a>
+  <ul class="nav-links">
+    <li><a aria-current="page" href="../listings/">Current Listings</a></li>
+    <li><a href="../buy/">Buy</a></li>
+    <li><a href="../buy/finance/">Finance</a></li>
+    <li><a href="../sell/">Sell</a></li>
+    <li><a href="../military-va/">Military &amp; VA</a></li>
+    <li><a href="../relocation/">Relocation</a></li>
+    <li><a href="../about/">About</a></li>
+    <li><a href="../resources/">Resources</a></li>
+    <li><a class="contact-link" href="../contact/">Contact</a></li>
+  </ul>
+  <button class="nav-toggle" data-nav-toggle aria-expanded="false" aria-controls="mobile-nav" aria-label="Open menu">Menu</button>
+</nav>
+<div class="mobile-nav" id="mobile-nav" data-mobile-nav>
+  <a aria-current="page" href="../listings/">Current Listings</a>
+  <a href="../buy/">Buy</a>
+  <a href="../buy/finance/">Finance</a>
+  <a href="../sell/">Sell</a>
+  <a href="../military-va/">Military &amp; VA</a>
+  <a href="../relocation/">Relocation</a>
+  <a href="../about/">About</a>
+  <a href="../resources/">Resources</a>
+  <a href="../testimonials/">Testimonials</a>
+  <a href="../contact/">Contact</a>
+</div>
+
+<main id="content">
 
 <header class="page-head">
   <div class="section-eyebrow">Hardin · Grayson · Breckinridge · Meade</div>
   <h1>Current Listings</h1>
-  <p>Browse active, pending, and recently sold properties across Central Kentucky.</p>
+  <p>Browse active, pending, and recently sold properties across Central Kentucky, including Leitchfield, Clarkson, Caneyville, and Grayson County.</p>
 </header>
 
 <div class="toolbar-wrap">
@@ -284,14 +318,16 @@ footer.credit a:hover{color:var(--navy);}
     <div class="empty-state"><h3>Loading listings…</h3></div>
   </div>
 </div>
+</main>
 
 <footer class="credit">
   Website by <a href="mailto:me@caseykeown.com">Twin Lakes Web Co.</a>
 </footer>
 
+<script src="../site.js"></script>
 <script>
 (function(){
-  var DATA_URL = 'data/listings.json';
+  var DATA_URL = 'listings.json';
   var grid = document.getElementById('listingsGrid');
   var countySelect = document.getElementById('countyFilter');
   var sortSelect = document.getElementById('sortSelect');
@@ -319,6 +355,11 @@ footer.credit a:hover{color:var(--navy);}
     return String(v == null ? '' : v).replace(/[&<>"']/g, function(c){
       return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
     });
+  }
+  function imageUrl(v){
+    var source = String(v || '');
+    if (!source || /^(?:https?:)?\/\//.test(source) || source.indexOf('data:') === 0) return source;
+    return '../' + source.replace(/^(?:\.\/|\/)+/, '');
   }
 
   function populateCounties(){
@@ -348,8 +389,9 @@ footer.credit a:hover{color:var(--navy);}
     var tag = l.url ? 'a' : 'div';
     var hrefAttr = l.url ? ' href="' + esc(l.url) + '" target="_blank" rel="noopener"' : '';
     var linkClass = l.url ? '' : ' no-link';
+    var listingAlt = l.address ? 'Listing photo for ' + l.address + (l.city ? ' in ' + l.city + ', ' + (l.state || 'Kentucky') : '') : 'Central Kentucky property listing';
     var imgBlock = l.image
-      ? '<img src="' + esc(l.image) + '" alt="' + esc(l.address || 'Listing photo') + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
+      ? '<img src="' + esc(imageUrl(l.image)) + '" alt="' + esc(listingAlt) + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';">'
         + '<div class="lc-ph" style="display:none;">' + esc(l.address || 'Photo coming soon') + '</div>'
       : '<div class="lc-ph">' + esc(l.address || 'Photo coming soon') + '</div>';
 
@@ -424,7 +466,7 @@ footer.credit a:hover{color:var(--navy);}
   fetch(DATA_URL, { cache: 'no-store' })
     .then(function(res){ if (!res.ok) throw new Error('Not found'); return res.json(); })
     .then(function(data){
-      allListings = (data && Array.isArray(data.listings)) ? data.listings : [];
+      allListings = (data && Array.isArray(data.listings)) ? data.listings.filter(function(l){ return l.active !== false; }) : [];
       populateCounties();
       render();
     })

@@ -7,6 +7,7 @@
 <!-- ── PRIMARY SEO ─────────────────────── -->
 <title>Hannah Keown, REALTOR® | Elizabethtown &amp; Central Kentucky Real Estate</title>
 <meta name="description" content="Hannah Keown is a VA-Certified REALTOR® with Schuler Bauer Real Estate Services ERA Powered, serving Hardin County, Grayson County, and surrounding areas. 100% 5-star reviews. Complimentary 2-10 Home Warranty for every seller.">
+<meta name="keywords" content="Kentucky REALTOR, Central Kentucky real estate, Leitchfield KY REALTOR, Clarkson KY REALTOR, Caneyville KY REALTOR, Grayson County real estate, Hardin County real estate, Elizabethtown KY REALTOR, VA certified REALTOR">
 <meta name="author" content="Hannah Keown, REALTOR®">
 <meta name="application-name" content="Hannah Keown Homes">
 <meta name="theme-color" content="#1c3557">
@@ -67,7 +68,10 @@
         { "@type": "AdministrativeArea", "name": "Hardin County, Kentucky" },
         { "@type": "AdministrativeArea", "name": "Grayson County, Kentucky" },
         { "@type": "AdministrativeArea", "name": "Breckinridge County, Kentucky" },
-        { "@type": "AdministrativeArea", "name": "Meade County, Kentucky" }
+        { "@type": "AdministrativeArea", "name": "Meade County, Kentucky" },
+        { "@type": "City", "name": "Leitchfield, Kentucky" },
+        { "@type": "City", "name": "Clarkson, Kentucky" },
+        { "@type": "City", "name": "Caneyville, Kentucky" }
       ],
       "geo": {
         "@type": "GeoCoordinates",
@@ -309,7 +313,7 @@ nav{
 /* ── AWARDS STRIP ─────────────────────── */
 .awards-section{padding:64px 28px;background:var(--bg-mid)}
 .awards-inner{max-width:1240px;margin:0 auto}
-.awards-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px}
+.awards-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:40px auto 0;max-width:760px}
 
 /* Individual award card */
 .award-card{
@@ -699,181 +703,6 @@ footer{background:var(--navy);padding:52px 28px 28px}
   .awards-grid{grid-template-columns:repeat(2,1fr)}
 }
 
-/* ── LISTINGS ─────────────────────────── */
-.listings-section{
-  padding:64px 28px;
-  background:var(--bg);
-}
-.listings-inner{
-  max-width:1240px;
-  margin:0 auto;
-}
-.listings-header{
-  margin-bottom:36px;
-}
-
-/* Card grid: 4 columns on wide, responsive down */
-.listings-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px;
-  justify-items:center;
-}
-
-/* Individual listing card */
-.listing-card{
-  position:relative;
-  border-radius:var(--radius-lg);
-  overflow:hidden;
-  display:block;
-  text-decoration:none;
-  color:inherit;
-  aspect-ratio:3/4;
-  width:100%;
-  box-shadow:var(--shadow-md);
-  transition:transform .3s,box-shadow .3s;
-  background:var(--bg-deep); /* visible while image loads */
-}
-.listing-card.is-pending .lc-badge{background:var(--gold);color:#fff}
-.listing-card.is-sold .lc-badge{background:var(--navy);color:#fff}
-.lc-description{font-family:var(--sans);font-size:.72rem;font-weight:300;line-height:1.45;color:rgba(255,255,255,.82);margin-top:9px}
-.listings-empty{padding:28px;border:1px solid rgba(28,53,87,.12);border-radius:var(--radius-md);color:var(--text-mid);background:rgba(255,255,255,.55)}
-.listing-card:hover{
-  transform:translateY(-5px);
-  box-shadow:var(--shadow-lg);
-}
-
-/* Photo fills the whole card */
-.listing-card > img{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  object-position:center;
-  display:block;
-  transition:transform .45s cubic-bezier(0.25,0.46,0.45,0.94);
-}
-.listing-card:hover > img{
-  transform:scale(1.04);
-}
-
-/* Placeholder shown if image missing */
-.lc-ph{
-  position:absolute;inset:0;
-  display:none;
-  align-items:center;justify-content:center;
-  background:linear-gradient(145deg,var(--navy) 0%,var(--steel) 100%);
-  font-family:var(--sans);font-size:.6rem;letter-spacing:.12em;
-  text-transform:uppercase;color:rgba(255,255,255,.35);text-align:center;
-  padding:16px;
-}
-
-/* Dark vignette - always present, strengthens at bottom */
-.lc-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(
-    to bottom,
-    rgba(15,28,48,0) 0%,
-    rgba(15,28,48,0.1) 40%,
-    rgba(15,28,48,0.72) 100%
-  );
-  pointer-events:none;
-}
-
-/* Subtle warm color-wash on hover */
-.lc-wash{
-  position:absolute;inset:0;
-  background:rgba(28,53,87,0.18);
-  opacity:0;
-  transition:opacity .3s;
-  pointer-events:none;
-}
-.listing-card:hover .lc-wash{opacity:1;}
-
-/* Text content pinned to bottom */
-.lc-body{
-  position:absolute;
-  bottom:0;left:0;right:0;
-  padding:20px 18px 18px;
-}
-.lc-price{
-  font-family:var(--serif);
-  font-size:1.3rem;
-  font-weight:500;
-  color:#fff;
-  line-height:1;
-  margin-bottom:7px;
-}
-/* Thin decorative rule between price and address */
-.lc-accent{
-  width:28px;height:1.5px;
-  background:rgba(255,255,255,.45);
-  border-radius:2px;
-  margin-bottom:7px;
-}
-.lc-address{
-  font-family:var(--sans);
-  font-size:.82rem;
-  font-weight:600;
-  color:#fff;
-  line-height:1.2;
-  margin-bottom:5px;
-}
-.lc-extra{
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-}
-.lc-location{
-  font-family:var(--sans);
-  font-size:.68rem;
-  font-weight:400;
-  color:rgba(255,255,255,.65);
-}
-.lc-specs{
-  font-family:var(--sans);
-  font-size:.65rem;
-  font-weight:400;
-  color:rgba(255,255,255,.5);
-}
-
-/* Pending status badge */
-.lc-badge{
-  position:absolute;
-  top:14px;left:14px;
-  font-family:var(--sans);
-  font-size:.58rem;
-  font-weight:700;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:#fff;
-  background:rgba(184,150,62,.88);
-  border:1px solid rgba(255,255,255,.25);
-  padding:4px 10px;
-  border-radius:var(--radius-pill);
-  backdrop-filter:blur(4px);
-  pointer-events:none;
-}
-
-/* "View Sold" footer link */
-.listings-more{
-  text-align:center;
-  margin-top:32px;
-}
-.listings-more .btn.btn-ghost{
-  font-size:.78rem;
-}
-
-/* Responsive breakpoints */
-@media(max-width:1040px){
-  .listings-grid{grid-template-columns:repeat(2,1fr);}
-}
-@media(max-width:520px){
-  .listings-grid{grid-template-columns:1fr 1fr;gap:12px;}
-  .listing-card{aspect-ratio:2/3;}
-  .lc-price{font-size:1.1rem;}
-}
 </style>
 </head>
 <body>
@@ -888,20 +717,20 @@ footer{background:var(--navy);padding:52px 28px 28px}
 <header>
 <!-- NAV -->
 <nav id="mainNav" aria-label="Primary navigation">
-  <a href="/" class="nav-logo">
+  <a href="./" class="nav-logo">
     <span class="nav-logo-name">Hannah Keown, REALTOR®</span>
     <span class="nav-logo-sub">Schuler Bauer ERA · Central Kentucky</span>
   </a>
   <ul class="nav-links">
-    <li><a href="/data/listings/index.html">Current Listings</a></li>
-    <li><a href="/buy/">Buy</a></li>
-    <li><a href="/buy/finance/">Finance</a></li>
-    <li><a href="/sell/">Sell</a></li>
-    <li><a href="/military-va/">Military &amp; VA</a></li>
-    <li><a href="/relocation/">Relocation</a></li>
-    <li><a href="/about/">About</a></li>
-    <li><a href="/resources/">Resources</a></li>
-    <li><a href="/contact/" class="nav-cta">Contact</a></li>
+    <li><a href="listings/">Current Listings</a></li>
+    <li><a href="buy/">Buy</a></li>
+    <li><a href="buy/finance/">Finance</a></li>
+    <li><a href="sell/">Sell</a></li>
+    <li><a href="military-va/">Military &amp; VA</a></li>
+    <li><a href="relocation/">Relocation</a></li>
+    <li><a href="about/">About</a></li>
+    <li><a href="resources/">Resources</a></li>
+    <li><a href="contact/" class="nav-cta">Contact</a></li>
   </ul>
   <button class="nav-hamburger" id="hamburger" type="button" aria-label="Open menu" aria-controls="mobileMenu" aria-expanded="false">
     <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
@@ -909,16 +738,16 @@ footer{background:var(--navy);padding:52px 28px 28px}
 </nav>
 
 <nav class="mobile-menu" id="mobileMenu" aria-label="Mobile navigation">
-  <a href="/data/listings/index.html">Current Listings</a>
-  <a href="/buy/">Buy</a>
-  <a href="/buy/finance/">Finance</a>
-  <a href="/sell/">Sell</a>
-  <a href="/military-va/">Military &amp; VA</a>
-  <a href="/relocation/">Relocation</a>
-  <a href="/about/">About</a>
-  <a href="/resources/">Resources</a>
-  <a href="/testimonials/">Testimonials</a>
-  <a href="/contact/" class="mobile-cta">Contact</a>
+  <a href="listings/">Current Listings</a>
+  <a href="buy/">Buy</a>
+  <a href="buy/finance/">Finance</a>
+  <a href="sell/">Sell</a>
+  <a href="military-va/">Military &amp; VA</a>
+  <a href="relocation/">Relocation</a>
+  <a href="about/">About</a>
+  <a href="resources/">Resources</a>
+  <a href="testimonials/">Testimonials</a>
+  <a href="contact/" class="mobile-cta">Contact</a>
 </nav>
 </header>
 
@@ -965,7 +794,7 @@ footer{background:var(--navy);padding:52px 28px 28px}
     <div class="hero-photo-card">
       <img
         src="assets/images/hannah-keown-hero.jpg"
-        alt="Hannah Keown, REALTOR® – Elizabethtown, Kentucky"
+        alt="Hannah Keown, REALTOR® serving Elizabethtown and Central Kentucky, standing in a bright kitchen"
         loading="eager"
       >
       <div class="hero-photo-caption">
@@ -987,7 +816,7 @@ footer{background:var(--navy);padding:52px 28px 28px}
 <!-- QUICK LINKS RIBBON -->
 <div class="ribbon">
   <div class="ribbon-inner">
-    <a href="/resources/" class="ribbon-item">
+    <a href="resources/" class="ribbon-item">
       <div class="ribbon-icon">📚</div>
       <div>
         <div class="ribbon-title">Free Resources</div>
@@ -1008,7 +837,7 @@ footer{background:var(--navy);padding:52px 28px 28px}
         <div class="ribbon-desc">Free instant market analysis</div>
       </div>
     </a>
-    <a href="/buy/finance/" class="ribbon-item">
+    <a href="buy/finance/" class="ribbon-item">
       <div class="ribbon-icon">✅</div>
       <div>
         <div class="ribbon-title">Get Pre-Approved</div>
@@ -1017,17 +846,6 @@ footer{background:var(--navy);padding:52px 28px 28px}
     </a>
   </div>
 </div>
-
-<!-- CURRENT LISTINGS - managed in /admin -->
-<section class="listings-section" id="listings" aria-labelledby="listings-title">
-  <div class="listings-inner">
-    <div class="listings-header">
-      <div class="section-eyebrow reveal">Available Properties</div>
-      <h2 class="section-title reveal d1" id="listings-title">Current Listings</h2>
-    </div>
-    <div class="listings-grid" id="currentListings" aria-live="polite"></div>
-  </div>
-</section>
 
 <!-- ACTION CARDS -->
 <div class="action-section">
@@ -1133,8 +951,8 @@ footer{background:var(--navy);padding:52px 28px 28px}
       <a href="https://www.northpointe.com/home-lending/get-started/dennie-dowell/" target="_blank" rel="noopener" class="lender-card reveal d1">
         <div class="lender-photo-col">
           <img
-            src="assets/images/dennie-dowell.jpg"
-            alt="Dennie Dowell – Northpointe Bank, Elizabethtown KY"
+            src="assets/images/dennie-dowell.webp"
+            alt="Dennie Dowell, VA and KHC-certified mortgage lender with Northpointe Bank in Elizabethtown, Kentucky"
             class="lender-card-photo"
             loading="lazy"
             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
@@ -1162,8 +980,8 @@ footer{background:var(--navy);padding:52px 28px 28px}
   <div class="about-inner">
     <div class="about-photo-wrap reveal">
       <img
-        src="assets/images/hannah-keown-hero.jpg"
-        alt="Hannah Keown, REALTOR® – Central Kentucky"
+        src="assets/images/K82.jpg"
+        alt="Hannah Keown, Central Kentucky REALTOR®, seated in a blue chair"
         class="about-img"
         loading="lazy"
         onerror="this.style.display='none'"
@@ -1176,7 +994,7 @@ footer{background:var(--navy);padding:52px 28px 28px}
     <div class="reveal d1">
       <div class="section-eyebrow" style="margin-bottom:10px">About Hannah</div>
       <h2 class="about-title">Your local guide<br><em>to Central Kentucky.</em></h2>
-      <p class="about-body">I'm Hannah Keown, REALTOR® with Schuler Bauer Real Estate Services ERA Powered, serving Hardin, Grayson, Breckinridge, Meade, and surrounding counties. I help buyers, sellers, veterans, first-time homeowners, and relocating families navigate real estate with clear communication and honest strategy.</p>
+      <p class="about-body">I'm Hannah Keown, REALTOR® with Schuler Bauer Real Estate Services ERA Powered, serving Hardin, Grayson, Breckinridge, Meade, and surrounding counties, including Leitchfield, Clarkson, and Caneyville. I help buyers, sellers, veterans, first-time homeowners, and relocating families navigate Kentucky real estate with clear communication and honest strategy.</p>
       <p class="about-body">Every listing includes professional photography, a tailored marketing plan, and a complimentary 2-10 Home Buyers Warranty. As a VA-certified agent, I understand the unique needs of military families - and I take that responsibility seriously.</p>
       <div class="about-tags">
         <span class="about-tag">VA Certified</span>
@@ -1273,12 +1091,6 @@ footer{background:var(--navy);padding:52px 28px 28px}
         >
         <div class="award-img-placeholder" style="display:none">SB Award</div>
       </div>
-      <div class="award-card is-placeholder reveal d2" aria-label="ERA production recognition photo coming soon">
-        <div class="award-img-placeholder" style="display:flex;aspect-ratio:4/3">ERA Recognition<br>Photo Coming Soon</div>
-      </div>
-      <div class="award-card is-placeholder reveal d3" aria-label="Schuler Bauer ERA recognition photo coming soon">
-        <div class="award-img-placeholder" style="display:flex;aspect-ratio:4/3">Schuler Bauer Awards<br>Photo Coming Soon</div>
-      </div>
     </div>
   </div>
 </div>
@@ -1347,10 +1159,10 @@ footer{background:var(--navy);padding:52px 28px 28px}
       <div>
         <div class="footer-col-title">Quick Links</div>
         <ul class="footer-links">
-          <li><a href="/resources/">Free Resources</a></li>
+          <li><a href="resources/">Free Resources</a></li>
           <li><a href="https://hannahkeown.schulerbauer.com" target="_blank" rel="noopener">Search KY Homes</a></li>
           <li><a href="https://hannahkeown.schulerbauer.com/selling/free-market-analysis/" target="_blank" rel="noopener">Home Value</a></li>
-          <li><a href="/buy/finance/">Finance &amp; Pre-Approval</a></li>
+          <li><a href="buy/finance/">Finance &amp; Pre-Approval</a></li>
         </ul>
       </div>
       <div>
@@ -1391,9 +1203,9 @@ footer{background:var(--navy);padding:52px 28px 28px}
           Mortgage and lending services provided by independently licensed lenders. Real estate brokerage services only.
         </div>
         <div class="footer-legal" style="text-align:right;min-width:160px">
-          <a href="/privacy">Privacy Policy</a> ·
-          <a href="/accessibility">Accessibility</a> ·
-          <a href="/terms-of-use/">Terms of Use</a>
+          <a href="privacy/">Privacy Policy</a> ·
+          <a href="accessibility/">Accessibility</a> ·
+          <a href="terms-of-use/">Terms of Use</a>
         </div>
       </div>
       <div class="footer-credit">
@@ -1449,90 +1261,6 @@ const obs = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.07, rootMargin: '0px 0px -28px 0px' });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
-
-/* ── CURRENT LISTINGS ────────────────── */
-(async function() {
-  const container = document.getElementById('currentListings');
-  if (!container) return;
-
-  const text = (value) => String(value ?? '');
-  const formatNumber = (value) => new Intl.NumberFormat('en-US').format(value);
-  const makeSpecs = (listing) => {
-    const specs = [];
-    if (listing.beds !== undefined && listing.beds !== '') specs.push(`${listing.beds} Bed${Number(listing.beds) === 1 ? '' : 's'}`);
-    if (listing.baths !== undefined && listing.baths !== '') specs.push(`${listing.baths} Bath${Number(listing.baths) === 1 ? '' : 's'}`);
-    if (listing.sqft !== undefined && listing.sqft !== '') specs.push(`${formatNumber(listing.sqft)} Sqft`);
-    return specs.join(' / ');
-  };
-  const addText = (parent, className, value) => {
-    if (!value) return;
-    const element = document.createElement('div');
-    element.className = className;
-    element.textContent = value;
-    parent.append(element);
-  };
-
-  try {
-    const response = await fetch('data/listings.json', { cache: 'no-store' });
-    if (!response.ok) throw new Error('Unable to load listings');
-    const data = await response.json();
-    const listings = Array.isArray(data.listings) ? data.listings.filter(item => item.active) : [];
-
-    if (!listings.length) {
-      const empty = document.createElement('p');
-      empty.className = 'listings-empty';
-      empty.textContent = 'New listings are coming soon. Contact Hannah for current availability.';
-      container.append(empty);
-      return;
-    }
-
-    listings.forEach((listing, index) => {
-      const card = document.createElement(listing.url ? 'a' : 'article');
-      const status = text(listing.status || 'Active').toLowerCase();
-      card.className = `listing-card reveal visible is-${status}`;
-      if (listing.url) {
-        card.href = text(listing.url);
-        card.target = '_blank';
-        card.rel = 'noopener';
-      }
-
-      const image = document.createElement('img');
-      image.src = text(listing.image);
-      image.alt = `${text(listing.address)} - ${text(listing.city)}, ${text(listing.state)}`;
-      image.loading = index < 2 ? 'eager' : 'lazy';
-      card.append(image);
-
-      if (status !== 'active') addText(card, 'lc-badge', text(listing.status));
-      ['lc-overlay', 'lc-wash'].forEach(className => {
-        const layer = document.createElement('div');
-        layer.className = className;
-        card.append(layer);
-      });
-
-      const body = document.createElement('div');
-      body.className = 'lc-body';
-      addText(body, 'lc-price', text(listing.price));
-      const accent = document.createElement('div');
-      accent.className = 'lc-accent';
-      body.append(accent);
-      addText(body, 'lc-address', text(listing.address));
-      const extra = document.createElement('div');
-      extra.className = 'lc-extra';
-      const locality = [listing.city, [listing.state, listing.zip].filter(Boolean).join(' ')].filter(Boolean).join(', ');
-      addText(extra, 'lc-location', locality);
-      addText(extra, 'lc-specs', makeSpecs(listing));
-      body.append(extra);
-      addText(body, 'lc-description', text(listing.description));
-      card.append(body);
-      container.append(card);
-    });
-  } catch (error) {
-    const empty = document.createElement('p');
-    empty.className = 'listings-empty';
-    empty.textContent = 'Listings are temporarily unavailable. Please contact Hannah for current availability.';
-    container.append(empty);
-  }
-})();
 
 /* ── SHARED LIGHTBOX ─────────────────── */
 (function() {

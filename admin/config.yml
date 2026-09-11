@@ -28,7 +28,7 @@ collections:
     files:
       - name: current_listings
         label: Current Listings
-        file: data/listings.json
+        file: listings/listings.json
         fields:
           - name: listings
             label: Listings
@@ -36,7 +36,7 @@ collections:
             label_singular: Listing
             summary: '{{fields.address}} - {{fields.price}}'
             fields:
-              - { name: active, label: Show on homepage, widget: boolean, default: true }
+              - { name: active, label: Show on website, widget: boolean, default: true }
               - { name: status, label: Status, widget: select, options: [Active, Pending, Sold], default: Active }
               - { name: address, label: Street address, widget: string }
               - { name: city, label: City, widget: string }
