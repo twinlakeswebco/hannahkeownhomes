@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 240" role="img" aria-labelledby="title desc">
+  <title id="title">Pennington Properties</title>
+  <desc id="desc">Pennington Properties logo recreated as scalable vector artwork from the brokerage logo reference.</desc>
+  <g fill="#d83732">
+    <rect x="0" y="10" width="220" height="220"/>
+    <text x="270" y="98" font-family="Arial, Helvetica, sans-serif" font-size="88" font-weight="700" letter-spacing="1">PENNINGTON</text>
+    <text x="270" y="205" font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="300" letter-spacing="3">PROPERTIES</text>
+  </g>
+  <g fill="none" stroke="#fff" stroke-width="8">
+    <path d="M62 198V48h56c51 0 82 26 82 65s-31 65-82 65H62"/>
+    <path d="M115 48v150"/>
+  </g>
+</svg>
