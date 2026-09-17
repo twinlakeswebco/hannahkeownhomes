@@ -31,3 +31,47 @@ if(tabs.length){
     });
   });
 }
+
+/* Sitewide website credit */
+(()=>{
+  const credit='Website by <a href="mailto:me@caseykeown.com">Twin Lakes Web Co. LLC</a>';
+  const existing=document.querySelector('.footer-credit-line, .footer-credit-global, .standalone-credit, footer.credit');
+  if(existing){
+    existing.innerHTML=credit;
+    return;
+  }
+
+  const footerInner=document.querySelector('.site-footer .footer-inner');
+  if(footerInner){
+    const block=document.createElement('div');
+    block.className='footer-bottom footer-credit-global';
+    block.innerHTML=credit;
+    footerInner.appendChild(block);
+    return;
+  }
+
+  const footer=document.createElement('footer');
+  footer.className='standalone-credit';
+  footer.innerHTML=credit;
+  footer.style.textAlign='center';
+  footer.style.padding='24px';
+  footer.style.font='500 13px system-ui, sans-serif';
+  footer.style.color='#4a5c6e';
+  const linkStyle=()=>{
+    const link=footer.querySelector('a');
+    if(link){link.style.color='inherit';link.style.fontWeight='600'}
+  };
+
+  if(document.title.startsWith('Page Not Found')){
+    footer.style.position='fixed';
+    footer.style.left='0';
+    footer.style.right='0';
+    footer.style.bottom='8px';
+    footer.style.padding='8px 16px';
+    footer.style.fontSize='12px';
+    footer.style.color='rgba(255,255,255,.72)';
+  }
+
+  document.body.appendChild(footer);
+  linkStyle();
+})();
