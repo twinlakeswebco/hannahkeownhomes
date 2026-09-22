@@ -76,6 +76,7 @@ h3{margin:0 0 10px;font-size:1.45rem;color:var(--navy)}
 .lender-body small{display:block;margin-bottom:12px;color:var(--steel);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
 .lender-body p{margin:0;color:var(--text-mid);font-size:.86rem}
 .lender-body .link-text{display:inline-block;margin-top:18px;color:var(--steel);font-weight:700;font-size:.76rem}
+.lender-contact{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:12px;font-size:.78rem}.lender-contact a{overflow-wrap:anywhere}.lender-contact .link-text{margin-top:6px}
 .tabs-card{overflow:hidden;border:1px solid rgba(28,53,87,.09);border-radius:var(--radius-lg);background:#fff;box-shadow:var(--shadow-md)}
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(28,53,87,.1);background:rgba(216,226,236,.45)}
 .tab{padding:18px 12px;border:0;border-right:1px solid rgba(28,53,87,.09);background:transparent;color:var(--text-mid);font:700 .78rem var(--sans);cursor:pointer}
