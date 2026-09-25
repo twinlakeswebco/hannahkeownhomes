@@ -1,0 +1,22 @@
+#market-analysis{scroll-margin-top:88px}
+.cma-form{max-width:960px;padding:clamp(20px,4vw,40px);background:var(--white);border:1px solid var(--bg-deep);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm)}
+.cma-form fieldset{min-width:0;margin:0 0 30px;padding:0;border:0}
+.cma-form legend{margin-bottom:18px;padding:0;font:500 1.65rem var(--serif);color:var(--navy)}
+.cma-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.cma-field{min-width:0}
+.cma-field label{display:block;margin-bottom:7px;font-size:.88rem;font-weight:600}
+.cma-field input,.cma-field select,.cma-field textarea{display:block;width:100%;min-width:0;padding:12px;border:1px solid var(--steel);border-radius:var(--radius-sm);background:var(--white);color:var(--navy);font:400 1rem var(--sans)}
+.cma-field textarea{resize:vertical;min-height:110px}
+.cma-wide{grid-column:1/-1}
+.cma-note,.cma-fine{font-size:.82rem;line-height:1.65;color:var(--text-mid)}
+.cma-note{margin:0 0 22px}
+.cma-check{display:flex;gap:12px;align-items:flex-start;margin-bottom:20px;color:var(--text-mid);font-size:.88rem;line-height:1.65;cursor:pointer}
+.cma-check.cma-fine{font-size:.78rem}
+.cma-check input{flex:0 0 auto;width:20px;height:20px;margin:3px 0 0;accent-color:var(--navy)}
+.cma-form a{font-weight:600;text-underline-offset:3px}
+.cma-form button{font-family:var(--sans);cursor:pointer;white-space:normal}
+.cma-form button:disabled{opacity:.65;cursor:wait;transform:none}
+.cma-status{margin:20px 0 0;color:var(--navy);font-weight:600;overflow-wrap:anywhere}
+.cma-status:empty{margin:0}
+.cma-honeypot{display:none!important}
+@media(max-width:620px){.cma-grid{grid-template-columns:1fr}.cma-wide{grid-column:auto}.cma-form button{width:100%}}
