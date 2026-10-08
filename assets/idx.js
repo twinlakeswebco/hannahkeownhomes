@@ -42,16 +42,10 @@
   function failure(container,error,retry) {
     const box = node('div',undefined,'idx-error');box.setAttribute('role','alert');box.append(node('p',error.message));
     const call = node('a','Call Hannah','btn btn-primary');call.href='tel:2705898376';box.append(call);
-    const button = node('button','Try again','btn btn-ghost idx-retry');button.type='button';button.addEventListener('click',retry);box.append(button);
+    const button = node('button','Try again','btn btn-outline idx-retry');button.type='button';button.addEventListener('click',retry);box.append(button);
     container.replaceChildren(box);
   }
-  const hbg = byId('hamburger'), menu = byId('mobileMenu');
-  function closeMenu() { menu.classList.remove('open');hbg.setAttribute('aria-expanded','false');hbg.setAttribute('aria-label','Open menu'); }
-  hbg.addEventListener('click',()=>{const open=!menu.classList.contains('open');menu.classList.toggle('open',open);hbg.setAttribute('aria-expanded',String(open));hbg.setAttribute('aria-label',open?'Close menu':'Open menu');if(open)menu.querySelector('a')?.focus();});
-  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeMenu));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.classList.contains('open')){closeMenu();hbg.focus();}});
-  document.addEventListener('click',e=>{if(!menu.contains(e.target)&&!hbg.contains(e.target))closeMenu();});
-  window.addEventListener('resize',()=>{if(innerWidth>960)closeMenu();});
+  // Shared navigation behavior is provided by site.js.
   if (document.body.dataset.idxPage === 'search') {
     const form = byId('propertySearch'), grid = byId('searchResults'), status = byId('searchStatus'), pager=byId('pagination');
     let controller, current = new URLSearchParams(location.search), page=1;
@@ -111,7 +105,7 @@
         if(Object.keys(p.features).length){const features=node('section',undefined,'idx-detail-panel'),list=node('dl',undefined,'idx-features');features.append(node('h2','Features & amenities'),list);for(const [key,value] of Object.entries(p.features)){if(!value.length)continue;const item=node('div');item.append(node('dt',key.replace(/([a-z])([A-Z])/g,'$1 $2')),node('dd',value.join(', ')));list.append(item);}left.append(features);}
         const contact=node('section',undefined,'idx-contact');contact.append(node('h2','Interested in this property?'),node('p','Ask Hannah a question or arrange a showing.'),node('p','Hannah Keown, REALTOR®'));
         const call=node('a','Call 270-589-8376','btn btn-primary');call.href='tel:2705898376';
-        const email=node('a','Request a showing','btn btn-ghost');email.href=`mailto:info@hannahkeownhomes.com?subject=${encodeURIComponent('Showing request: MLS #'+p.mlsNumber)}&body=${encodeURIComponent('Hi Hannah, I am interested in this property:\n'+location.href+'\n\nPlease contact me about a showing.\n\nName:\nPhone:\nPreferred date and time:')}`;
+        const email=node('a','Request a showing','btn btn-outline');email.href=`mailto:info@hannahkeownhomes.com?subject=${encodeURIComponent('Showing request: MLS #'+p.mlsNumber)}&body=${encodeURIComponent('Hi Hannah, I am interested in this property:\n'+location.href+'\n\nPlease contact me about a showing.\n\nName:\nPhone:\nPreferred date and time:')}`;
         contact.append(call,email,attribution(p));right.append(contact);
         const links=node('div',undefined,'idx-detail-links');
         if(p.virtualTour&&https(p.virtualTour)){const tour=node('a','View virtual tour');tour.href=p.virtualTour;tour.target='_blank';tour.rel='noopener noreferrer';links.append(tour);}
