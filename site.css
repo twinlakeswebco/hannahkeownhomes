@@ -76,6 +76,14 @@ h3{margin:0 0 10px;font-size:1.45rem;color:var(--navy)}
 .lender-body small{display:block;margin-bottom:12px;color:var(--steel);font-weight:700;text-transform:uppercase;letter-spacing:.08em}
 .lender-body p{margin:0;color:var(--text-mid);font-size:.86rem}
 .lender-body .link-text{display:inline-block;margin-top:18px;color:var(--steel);font-weight:700;font-size:.76rem}
+/* Full-card lender links retain separate phone and email actions. */
+.lender-card-linked{position:relative;grid-template-columns:170px minmax(0,1fr)}
+.lender-card-linked .lender-body{min-width:0}
+.lender-card-link::after{content:"";position:absolute;inset:0;z-index:1}
+.lender-card-linked .lender-contact a:not(.lender-card-link){position:relative;z-index:2}
+.lender-card-linked:hover{box-shadow:var(--shadow-md)}
+.lender-card-linked:focus-within{outline:2px solid var(--steel);outline-offset:4px}
+@media(min-width:761px){.lender-grid-centered{grid-template-columns:repeat(4,minmax(0,1fr))}.lender-grid-centered>.lender-card{grid-column:span 2}.lender-grid-centered>.lender-card:last-child:nth-child(odd){grid-column:2 / span 2}}
 .lender-contact{display:flex;flex-direction:column;align-items:flex-start;gap:6px;margin-top:12px;font-size:.78rem}.lender-contact a{overflow-wrap:anywhere}.lender-contact .link-text{margin-top:6px}
 .tabs-card{overflow:hidden;border:1px solid rgba(28,53,87,.09);border-radius:var(--radius-lg);background:#fff;box-shadow:var(--shadow-md)}
 .tabs{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid rgba(28,53,87,.1);background:rgba(216,226,236,.45)}
