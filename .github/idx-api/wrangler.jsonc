@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hannah-keown-idx",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-10-05",
+  "workers_dev": true,
+  "vars": {
+    "ALLOWED_ORIGINS": "https://hannahkeownhomes.com,https://www.hannahkeownhomes.com"
+  },
+  "ratelimits": [{"name":"SEARCH_LIMITER","namespace_id":"278376","simple":{"limit":120,"period":60}}],
+  "observability": {"enabled":false}
+}

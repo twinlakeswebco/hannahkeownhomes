@@ -25,6 +25,7 @@
 <p class="eyebrow reveal d1 idx-reveal">Find your next home</p><h1 class="idx-title reveal d2 idx-reveal" id="search-title">Search Kentucky Properties</h1>
 <p class="idx-intro">Explore active Kentucky listings available through the Greater Louisville MLS feed. Find a property you love, then contact Hannah for details or a showing.</p>
 <form class="idx-form" id="propertySearch">
+<label class="idx-address-field" id="addressSearchField" hidden>Property address<input name="address" type="search" autocomplete="off" maxlength="160" placeholder="e.g. 123 Main St" aria-describedby="addressSearchHelp" disabled><span id="addressSearchHelp" class="idx-field-help">Enter all or part of the address. Use City or ZIP code to narrow your search.</span></label>
 <label>City<input name="city" autocomplete="address-level2" maxlength="80" placeholder="e.g. Elizabethtown"></label>
 <label>County<select name="county"><option value="">All counties</option><option>Hardin</option><option>Grayson</option><option>Breckinridge</option><option>Meade</option><option>Jefferson</option><option>Bullitt</option><option>Oldham</option><option>Nelson</option><option>Hart</option><option>Larue</option><option>Shelby</option><option>Spencer</option></select></label>
 <label>ZIP code<input name="zip" inputmode="numeric" pattern="[0-9]{5}" maxlength="5" autocomplete="postal-code" placeholder="e.g. 42701"></label>

@@ -48,6 +48,11 @@
   // Shared navigation behavior is provided by site.js.
   if (document.body.dataset.idxPage === 'search') {
     const form = byId('propertySearch'), grid = byId('searchResults'), status = byId('searchStatus'), pager=byId('pagination');
+    // Enable only after the deployed Worker confirms support for this filter.
+    function addressSearchAvailable(available) {
+      byId('addressSearchField').hidden=!available;
+      form.elements.address.disabled=!available;
+    }
     let controller, current = new URLSearchParams(location.search), page=1;
     function restore() { form.reset();for(const field of form.elements){if(field.name&&current.has(field.name))field.value=current.get(field.name);} }
     function parameters() { const p=new URLSearchParams();for(const [k,v] of new FormData(form)){const value=String(v).trim();if(value)p.set(k,value);}return p; }
@@ -60,6 +65,8 @@
       try {
         const data=await api(`/api/properties${current.size?'?'+current:''}`,ownController.signal);
         if(ownController!==controller)return;
+        addressSearchAvailable(data.supportsAddressSearch===true);
+        if(current.get('address')&&data.supportsAddressSearch!==true)throw new Error('Address search is temporarily unavailable. Clear the address to search with other filters.');
         status.textContent=data.total===null ? `Showing ${data.listings.length} properties` : `${data.total.toLocaleString()} matching ${data.total===1?'property':'properties'}`;
         for(const p of data.listings){
           const card=node('a',undefined,'idx-card reveal visible');card.href=`/property.html?id=${encodeURIComponent(p.key)}&search=${encodeURIComponent(current.toString())}`;
@@ -69,7 +76,7 @@
         if(!data.listings.length)grid.append(node('p','No properties matched this search. Adjust your filters or contact Hannah for help finding a property.','idx-empty'));
         byId('previousPage').disabled=data.page<=1;byId('nextPage').disabled=!data.hasNext;byId('pageLabel').textContent=`Page ${data.page}`;pager.hidden=!data.listings.length&&data.page<=1;
         notices(data.listings,data.fetchedAt);
-      } catch(error) { if(error.name!=='AbortError'&&ownController===controller){status.textContent='Property search unavailable';failure(grid,error,()=>load());} }
+      } catch(error) { if(error.name!=='AbortError'&&ownController===controller){if(current.get('address')&&error.message==='Unsupported search parameter.'){addressSearchAvailable(false);error.message='Address search is temporarily unavailable. Reset filters to search by city, county, or ZIP code.';}status.textContent='Property search unavailable';failure(grid,error,()=>load());} }
       finally{if(ownController===controller){grid.setAttribute('aria-busy','false');form.querySelector('button[type="submit"]').disabled=false;}}
     }
     form.addEventListener('submit',e=>{e.preventDefault();const min=form.elements.minPrice,max=form.elements.maxPrice;max.setCustomValidity(min.value&&max.value&&Number(min.value)>Number(max.value)?'Maximum price must be at least the minimum price.':'');if(form.reportValidity())load(parameters(),'pushState');});
