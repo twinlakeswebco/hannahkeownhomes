@@ -4,7 +4,7 @@ Source recovered from the October 8 diagnostic package, including its Workers-co
 
 ## Address search
 
-`GET /api/properties?address=123%20Main&city=Leitchfield` searches all or part of `UnparsedAddress`, ignoring case, together with the existing filters. Use street abbreviations as listed in the MLS or omit the suffix. This is a RESO OData search; it does not use Spark v1's `StreetAddress` parameter. Apostrophes are escaped as OData literals. Duplicate parameters, control characters, and addresses longer than 160 characters are rejected. Address searches require `InternetAddressDisplayYN eq true` in addition to the existing public, active, Kentucky restrictions.
+`GET /api/properties?address=123%20Main&city=Leitchfield` searches address words within `UnparsedAddress`, ignoring case and spacing, together with the existing filters. Pasted full addresses in the format `100 Example St 2B, Anytown, KY 12345` search the street and unit terms plus the ZIP code. Use street abbreviations as listed in the MLS or omit the suffix. This is a RESO OData search; it does not use Spark v1's `StreetAddress` parameter. Apostrophes are escaped as OData literals. Duplicate parameters, control characters, and addresses longer than 160 characters are rejected. Address searches require `InternetAddressDisplayYN eq true` in addition to the existing public, active, Kentucky restrictions.
 
 Search responses include `supportsAddressSearch: true`. The frontend enables the address field only after this flag is received from the deployed Worker. URL history, pagination, detail-page return links, and Reset filters retain the existing behavior.
 

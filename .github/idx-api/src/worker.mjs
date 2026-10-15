@@ -25,7 +25,14 @@ export function searchQuery(params, key) {
   for (const name of params.keys()) if (!allowed.has(name) || params.getAll(name).length !== 1) throw new ApiError(400, 'Unsupported search parameter.');
   const filters = ["StandardStatus eq 'Active'", 'InternetEntireListingDisplayYN eq true', "StateOrProvince eq 'KY'"];
   const address = textParam(params, 'address', 160);
-  if (address) filters.push(`contains(toupper(UnparsedAddress),${quote(address.toUpperCase())})`, 'InternetAddressDisplayYN eq true');
+  if (address) {
+    // The feed formats full addresses for display but searches individual address parts.
+    const fullAddress = address.match(/^(.+?),\s*([^,]+),\s*(?:KY|Kentucky)\s+(\d{5})(?:-\d{4})?$/i);
+    const street = (fullAddress ? fullAddress[1] : address).trim();
+    for (const term of street.split(/\s+/)) filters.push(`contains(toupper(UnparsedAddress),${quote(term.toUpperCase())})`);
+    filters.push('InternetAddressDisplayYN eq true');
+    if (fullAddress) filters.push(`PostalCode eq ${quote(fullAddress[3])}`);
+  }
   for (const [name, field] of [['city','City'],['county','CountyOrParish']]) {
     const value = textParam(params, name); if (value) filters.push(`${field} eq ${quote(value)}`);
   }

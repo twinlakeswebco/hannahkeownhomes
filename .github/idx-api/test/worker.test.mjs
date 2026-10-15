@@ -11,7 +11,8 @@ test('ZIP searches do not infer the location of address-hidden listings',()=>{as
 test('address search combines case-insensitive partial matching with public address permissions and existing filters',()=>{
   const {query,page}=searchQuery(new URLSearchParams({address:'  123 mAiN  ',city:'Elizabethtown',zip:'42701',maxPrice:'350000',page:'2'}));
   const filter=query.get('$filter');
-  assert.ok(filter.includes("contains(toupper(UnparsedAddress),'123 MAIN')"));
+  assert.ok(filter.includes("contains(toupper(UnparsedAddress),'123')"));
+  assert.ok(filter.includes("contains(toupper(UnparsedAddress),'MAIN')"));
   assert.ok(filter.includes('InternetAddressDisplayYN eq true'));
   assert.ok(filter.includes("City eq 'Elizabethtown'"));
   assert.ok(filter.includes("PostalCode eq '42701'"));
@@ -21,9 +22,21 @@ test('address search combines case-insensitive partial matching with public addr
 test('blank addresses do not narrow a normal search',()=>{
   assert.equal(searchQuery(new URLSearchParams({address:'  '})).query.get('$filter'),searchQuery(new URLSearchParams()).query.get('$filter'));
 });
+test('pasted full addresses search street and unit terms within the supplied ZIP',()=>{
+  const filter=searchQuery(new URLSearchParams({address:'100 Example St 2B, Anytown, ky 12345'})).query.get('$filter');
+  for(const term of ['100','EXAMPLE','ST','2B'])assert.ok(filter.includes(`contains(toupper(UnparsedAddress),'${term}')`));
+  assert.ok(filter.includes("PostalCode eq '12345'"));
+  assert.ok(!filter.includes("contains(toupper(UnparsedAddress),'ANYTOWN"));
+  assert.ok(filter.includes('InternetAddressDisplayYN eq true'));
+});
+test('street terms tolerate extra spaces while explicit location and price filters still apply',()=>{
+  const filter=searchQuery(new URLSearchParams({address:'100   Example St',city:'Anytown',zip:'12345',maxPrice:'200000'})).query.get('$filter');
+  assert.ok(filter.includes("contains(toupper(UnparsedAddress),'EXAMPLE')"));
+  assert.ok(filter.includes("City eq 'Anytown'"));assert.ok(filter.includes("PostalCode eq '12345'"));assert.ok(filter.includes('ListPrice le 200000'));
+});
 test('address literals escape quotes and reject excessive length, control characters, duplicates, and raw filters',()=>{
-  const address="123 O'Brien') or true or ('";
-  assert.ok(searchQuery(new URLSearchParams({address})).query.get('$filter').includes("contains(toupper(UnparsedAddress),'123 O''BRIEN'') OR TRUE OR (''')"));
+  const address="O'Brien')";
+  assert.ok(searchQuery(new URLSearchParams({address})).query.get('$filter').includes("contains(toupper(UnparsedAddress),'O''BRIEN'')')"));
   for(const address of ['x'.repeat(161),'123 Main\nSt','123 Main\u0000'])assert.throws(()=>searchQuery(new URLSearchParams({address})),/Invalid address/);
   assert.throws(()=>searchQuery(new URLSearchParams('address=A&address=B')),/Unsupported search parameter/);
   assert.throws(()=>searchQuery(new URLSearchParams({address:'123 Main','$filter':'true'})),/Unsupported search parameter/);
@@ -56,7 +69,7 @@ test('address request reaches the MLS and returns existing attribution with capa
   assert.equal(body.supportsAddressSearch,true);assert.equal(body.total,1);
   assert.equal(body.listings[0].address,'123 Main St');assert.equal(body.listings[0].broker,'Example Broker');
   assert.equal(body.listings[0].disclaimer,'MLS disclaimer.');
-  assert.ok(resoUrl.searchParams.get('$filter').includes("contains(toupper(UnparsedAddress),'123 MAIN')"));
+  assert.ok(resoUrl.searchParams.get('$filter').includes("contains(toupper(UnparsedAddress),'MAIN')"));
   assert.ok(resoUrl.searchParams.get('$filter').includes('InternetAddressDisplayYN eq true'));
 });
 test('no matching address returns an empty result with capability flag',async()=>{
