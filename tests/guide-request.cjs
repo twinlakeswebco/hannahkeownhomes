@@ -64,7 +64,8 @@ const server = http.createServer(async (req, res) => {
       assert.equal(await page.locator('#guide-choice').inputValue(), guide);
       await page.locator('button[type="submit"]').click();
       assert.equal(calls.length, 0);
-      assert.equal(await page.locator('#guide-ready').isVisible(), false);
+      assert.equal(await page.locator('#guide-reader').isVisible(), false);
+      assert.equal(await page.locator('#guide-frame').getAttribute('src'), null);
       checks++;
       for (const email of ['bad-email', 'person@localhost']) {
         await page.locator('#guide-email').fill(email);
@@ -75,7 +76,33 @@ const server = http.createServer(async (req, res) => {
       }
       await page.locator('#guide-email').fill('buyer@example.com');
       await page.locator('button[type="submit"]').click();
-      await page.waitForURL(origin + pdfs[guide]);
+      await page.getByText('Use the arrows or swipe', { exact: false }).waitFor();
+      const frame = page.frameLocator('#guide-frame');
+      assert.equal(new URL(page.url()).pathname, '/resources/guide.html');
+      assert.equal(await page.locator('#guide-pdf').getAttribute('href'), pdfs[guide]);
+      assert.equal(await frame.locator('.page-image').count(), { buyer: 36, seller: 24, ultimate: 11 }[guide]);
+      assert.equal(await frame.locator('.page-image').first().evaluate(img => img.complete && img.naturalWidth > 0), true);
+      await frame.locator('#next-page-btn').click();
+      await page.waitForFunction(() => document.querySelector('#guide-frame').contentWindow.pageFlip.getCurrentPageIndex() > 0);
+      await frame.locator('#page-input').fill('5');
+      await frame.locator('#page-input').dispatchEvent('change');
+      await page.waitForFunction(() => document.querySelector('#guide-frame').contentWindow.pageFlip.getCurrentPageIndex() === 4);
+      await frame.locator('#zoom-slider').fill('2');
+      assert.equal(await frame.locator('#zoom-level').textContent(), '2x');
+      await frame.locator('#zoom-slider').fill('1');
+      if (guide === 'buyer') {
+        await frame.locator('#fullscreen-btn').click();
+        await page.waitForFunction(() => document.querySelector('#guide-frame').contentDocument.fullscreenElement !== null);
+        await frame.locator('body').evaluate(() => document.exitFullscreen());
+        await page.setViewportSize({ width: 390, height: 844 });
+        await page.waitForFunction(() => document.querySelector('#guide-frame').contentWindow.pageFlip.getSettings().display === 'single');
+        await frame.locator('#next-page-btn').click();
+        await page.waitForFunction(() => document.querySelector('#guide-frame').contentWindow.pageFlip.getCurrentPageIndex() > 4);
+        await page.setViewportSize({ width: 1440, height: 1000 });
+        await page.waitForFunction(() => document.querySelector('#guide-frame').contentWindow.pageFlip.getSettings().display === 'double');
+        checks += 3;
+      }
+      checks += 4;
       assert.equal(calls.length, 1);
       assert.equal(calls[0].email, 'buyer@example.com');
       assert.equal(calls[0].guide_id, guide);
@@ -94,7 +121,8 @@ const server = http.createServer(async (req, res) => {
       await page.getByText('We could not confirm your request.', { exact: false }).waitFor();
       assert.equal(new URL(page.url()).pathname, '/resources/guide.html');
       assert.equal(await page.locator('#guide-email').inputValue(), 'buyer@example.com');
-      assert.equal(await page.locator('#guide-ready').isVisible(), false);
+      assert.equal(await page.locator('#guide-reader').isVisible(), false);
+      assert.equal(await page.locator('#guide-frame').getAttribute('src'), null);
       assert.equal(await page.locator('button[type="submit"]').isEnabled(), true);
       checks++;
     }
@@ -115,7 +143,21 @@ const server = http.createServer(async (req, res) => {
       await page.setViewportSize(viewport);
       await visit('ultimate');
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      await page.locator('#guide-email').fill('reader@example.com');
+      await page.locator('button[type="submit"]').click();
+      await page.getByText('Use the arrows or swipe', { exact: false }).waitFor();
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      const readerFrame = page.frameLocator('#guide-frame');
+      assert.equal(await readerFrame.locator('body').evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
+      await readerFrame.locator('#next-page-btn').click();
+      await page.waitForFunction(() => document.querySelector('#guide-frame').contentWindow.pageFlip.getCurrentPageIndex() > 0);
       await page.screenshot({ path: `/tmp/hkh-guide-${viewport.width}.png`, fullPage: true });
+      checks++;
+    }
+    for (const guide of Object.keys(pdfs)) {
+      await page.goto(origin + '/resources/flipbooks/' + guide + '/');
+      await page.waitForURL(origin + '/resources/guide.html?guide=' + guide);
+      assert.equal(await page.locator('#guide-reader').isVisible(), false);
       checks++;
     }
     const noJS = await browser.newContext({ javaScriptEnabled: false });
