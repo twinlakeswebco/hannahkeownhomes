@@ -1,0 +1,17 @@
+{
+  "buyer": {
+    "title": "Buyer’s Guide",
+    "source": "buy/buyer-guide.pdf",
+    "pages": 36
+  },
+  "seller": {
+    "title": "Seller’s Guide",
+    "source": "sell/seller-guide.pdf",
+    "pages": 24
+  },
+  "ultimate": {
+    "title": "Ultimate Guide to Buy and Sell",
+    "source": "resources/Ultimate-guide-to-buy&sell.pdf",
+    "pages": 11
+  }
+}

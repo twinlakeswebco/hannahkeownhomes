@@ -1,0 +1,4 @@
+Generated with S-poony/Pages (MIT, per upstream README)
+Source: https://github.com/S-poony/Pages/tree/cb7c648b05298c6fdd70453244dbaf116880e4d1
+PagesEngine (MIT): https://github.com/S-poony/PagesEngine/tree/6c585892900409b2f794afb34c9ad3dc4e6f715d
+See PagesEngine-LICENSE.txt for copyright and permission notice.

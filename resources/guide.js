@@ -22,8 +22,38 @@
   const email = form.elements.namedItem('email');
   const button = form.querySelector('button[type="submit"]');
   const status = document.getElementById('guide-status');
-  const ready = document.getElementById('guide-ready');
-  const open = document.getElementById('guide-open');
+  const reader = document.getElementById('guide-reader');
+  const frame = document.getElementById('guide-frame');
+  const readerStatus = document.getElementById('guide-reader-status');
+  let readerTimeout;
+  const sizeReader = () => {
+    if (!reader.hidden) frame.style.height = `${Math.max(320, innerHeight - Math.max(80, frame.getBoundingClientRect().top) - 16)}px`;
+  };
+  window.addEventListener('resize', sizeReader);
+  window.addEventListener('message', event => {
+    if (event.origin !== location.origin || event.source !== frame.contentWindow ||
+        event.data?.type !== 'hkh-guide-ready' || event.data.guide !== window.hkhGuideAccess) return;
+    clearTimeout(readerTimeout);
+    readerStatus.textContent = 'Use the arrows or swipe to turn pages. Zoom in for a closer look.';
+    frame.hidden = false;
+  });
+  const showReader = (guide, id) => {
+    window.hkhGuideAccess = id;
+    document.getElementById('guide-reader-title').textContent = guide.title;
+    document.getElementById('guide-pdf').href = guide.url;
+    document.querySelector('.guide-layout').hidden = true;
+    reader.hidden = false;
+    frame.title = `${guide.title}, interactive flipbook`;
+    frame.hidden = false;
+    readerStatus.textContent = 'Loading your guide…';
+    frame.src = `/resources/flipbooks/${id}/`;
+    document.getElementById('guide-reader-title').focus({ preventScroll: true });
+    reader.scrollIntoView({ block: 'start', behavior: 'instant' });
+    sizeReader();
+    readerTimeout = setTimeout(() => {
+      readerStatus.textContent = 'The flipbook is taking longer to load. You can open the PDF below.';
+    }, 30000);
+  };
   const getGuide = key => Object.hasOwn(guides, key) ? guides[key] : null;
   let pending = false;
 
@@ -31,8 +61,6 @@
     const guide = getGuide(choice.value);
     document.getElementById('guide-title').textContent = guide ? guide.title : 'Your next move starts here.';
     document.getElementById('guide-description').textContent = guide ? guide.description : 'Choose a guide and enter your email to access practical advice for buying or selling in Central Kentucky.';
-    ready.hidden = true;
-    open.removeAttribute('href');
     status.textContent = '';
   };
   const requested = new URLSearchParams(location.search).get('guide');
@@ -74,7 +102,6 @@
     email.readOnly = true;
     button.textContent = 'Submitting…';
     form.setAttribute('aria-busy', 'true');
-    ready.hidden = true;
     status.textContent = 'Submitting your guide request…';
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 30000);
@@ -87,10 +114,8 @@
       });
       const result = await response.json();
       if (!response.ok || result.success !== true) throw new Error('Submission not confirmed');
-      open.href = guide.url;
-      ready.hidden = false;
-      status.textContent = 'Your request was received. Opening your guide. If it does not open, use the button below.';
-      location.assign(guide.url);
+      status.textContent = 'Your request was received.';
+      showReader(guide, choice.value);
     } catch {
       status.textContent = 'We could not confirm your request. Your email is still here. Please try again, or contact Hannah at (270) 589-8376 for your guide.';
       status.focus();

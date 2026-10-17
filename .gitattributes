@@ -1,0 +1,2 @@
+resources/flipbooks/** linguist-generated=true
+tools/guides/vendor/** linguist-vendored=true whitespace=-blank-at-eol,-blank-at-eof
