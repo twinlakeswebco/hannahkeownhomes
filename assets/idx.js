@@ -95,7 +95,8 @@
         if(!/^[A-Za-z0-9_-]{1,80}$/.test(id))throw new Error('Choose a property from the search results to view its details.');
         const data=await api(`/api/properties/${encodeURIComponent(id)}`),p=data.listing;
         document.title=`${p.addressAllowed?p.address:p.city+' property'} | Hannah Keown Homes`;
-        const head=node('div',undefined,'idx-detail-head'),heading=node('div');heading.append(node('p',p.type,'section-eyebrow'),node('h1',p.address,'section-title'));heading.lastChild.id='property-title';heading.append(node('p',locality(p),'idx-intro'));head.append(heading,node('p',money(p.price),'idx-price'));details.append(head);
+        const canonical=new URL('https://hannahkeownhomes.com/property.html');canonical.searchParams.set('id',p.key);document.querySelector('link[rel="canonical"]').href=canonical.href;
+        const head=node('div',undefined,'idx-detail-head'),heading=node('div');byId('property-title').textContent=p.address;heading.append(node('p',p.type,'section-eyebrow'));heading.append(node('p',locality(p),'idx-intro'));head.append(heading,node('p',money(p.price),'idx-price'));details.append(head);
         const layout=node('div',undefined,'idx-detail-grid'),left=node('div'),right=node('aside');layout.append(left,right);details.append(layout);
         const gallery=node('div',undefined,'idx-gallery');left.append(gallery);
         if(p.photos.length){

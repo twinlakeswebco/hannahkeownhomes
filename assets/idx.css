@@ -8,3 +8,5 @@
 @media(max-width:960px){.idx-section{padding-top:40px}}@media(max-width:600px){.idx-section{padding-top:32px}}
 
 .idx-detail-grid>div{min-width:0}.idx-detail-panel,.idx-contact{overflow-wrap:anywhere}
+
+#property-title{font:500 clamp(1.8rem,4vw,2.6rem)/1.2 var(--serif);max-width:100%;overflow-wrap:anywhere}

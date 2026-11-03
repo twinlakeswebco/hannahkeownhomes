@@ -127,3 +127,14 @@ h3{margin:0 0 10px;font-size:1.45rem;color:var(--navy)}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
 .footer-credit-global{width:min(1180px,100%);margin:28px auto 0;padding:18px 28px 0;border-top:1px solid rgba(255,255,255,.1);font-size:.7rem;color:rgba(255,255,255,.48);text-align:center}.footer-credit-global a{font-size:inherit;color:rgba(255,255,255,.68);text-decoration:none}.footer-credit-global a:hover{color:#fff}.standalone-credit{text-align:center;padding:28px 24px 44px;font-size:.7rem;color:var(--text-soft)}.standalone-credit a{font-size:inherit;font-weight:600;color:var(--steel);text-decoration:none}.standalone-credit a:hover{color:var(--navy)}
+
+/* Reserve natural image space and allow content to shrink inside narrow grids. */
+img{height:auto}
+.home-hero-inner>*,.split>*,.compact-lender>*,.lender-card>*,.footer-inner>*{min-width:0}
+.compact-lender,.lender-card{overflow-wrap:anywhere}
+.compact-lender{grid-template-columns:130px minmax(0,1fr)}
+.hero-contact-row a,.site-footer a{overflow-wrap:anywhere}
+:target{scroll-margin-top:88px}
+input,select,textarea{max-width:100%;font-size:1rem}
+@media(max-width:620px){.compact-lender{grid-template-columns:100px minmax(0,1fr)}}
+@media(max-width:460px){.compact-lender{grid-template-columns:1fr}.compact-lender img{height:260px;min-height:0;object-position:top}.resource{min-width:0}.resource>div{min-width:0}}
