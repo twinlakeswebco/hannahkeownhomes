@@ -24,7 +24,7 @@ External link checks returned successful responses for the VA, USDA, KHC, Fannie
 
 ## Search Console
 
-The signed-in `casey@twinlakesweb.com` account initially listed only Kentucky Catholic. A URL-prefix property for `https://hannahkeownhomes.com/` was added, and Google's exact HTML verification meta tag was placed on the homepage. Ownership verification, sitemap submission, and URL inspection must be confirmed after this deployment; adding the tag alone is not proof of successful verification.
+The signed-in `casey@twinlakesweb.com` account initially listed only Kentucky Catholic. A URL-prefix property for `https://hannahkeownhomes.com/` was added, and Google's exact HTML verification meta tag was placed on the homepage. Google confirmed ownership through the HTML tag, and the corrected sitemap was resubmitted successfully after deployment. Search Console retained the previous sitemap history of 12 discovered pages; the new sitemap contains 14 URLs, which Google will process on its schedule.
 
 Submit `https://hannahkeownhomes.com/sitemap.xml`. Inspect the homepage, `/buy/`, `/sell/`, and `/search.html`; compare Google's selected canonical with the declared apex URL. Check Pages, Manual Actions, and Security Issues before attributing all visibility problems to code. Do not use the deprecated anonymous sitemap ping endpoint. A sitemap helps discovery but does not guarantee indexing or rankings.
 
@@ -51,4 +51,4 @@ Sources: [Google sitemaps overview](https://developers.google.com/search/docs/cr
 
 Run `python3 tools/check-seo.py`. The GitHub workflow runs the same dependency-free check on pushes and pull requests. It fails when canonical URLs, metadata, headings, structured-data JSON, local assets, internal anchors, or sitemap coverage drift. It does not replace live HTTP checks, Google indexing reports, or browser testing.
 
-Browser validation covered eight key routes at 320, 768, and 1440 pixels with no horizontal overflow. Mobile navigation, financing tabs, and the responsive hero image worked. The local checker passed for 23 HTML documents and 14 indexable canonical URLs.
+Browser validation covered eight key routes at 320, 768, and 1440 pixels with no horizontal overflow. Mobile navigation, financing tabs, and the responsive hero image worked. The local checker passed for 23 HTML documents and 14 indexable canonical URLs. The GitHub SEO workflow and Pages deployment passed, and all 14 public URLs returned HTTP 200 with matching canonical tags. Final live asset validation caught and corrected an empty K82 WebP file; the checker now also validates nonempty destinations and complete WebP headers.

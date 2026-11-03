@@ -83,6 +83,11 @@ for path, page in pages.items():
             values = page.meta(key)
             if len(values) != 1 or not values[0]:
                 errors.append(f'{rel}: missing or duplicate {key}')
+        for image in page.meta('og:image') + page.meta('twitter:image'):
+            asset = urlsplit(image)
+            target = ROOT / unquote(asset.path.lstrip('/'))
+            if asset.scheme != 'https' or asset.hostname != 'hannahkeownhomes.com' or not target.is_file() or not target.stat().st_size:
+                errors.append(f'{rel}: invalid social image {image}')
         if page.meta('og:url') != [url]:
             errors.append(f'{rel}: og:url differs from canonical')
         if not page.schemas:
@@ -113,13 +118,22 @@ for path, page in pages.items():
             target /= 'index.html'
         if not target.is_file():
             errors.append(f'{rel}: missing destination {ref}')
+        elif not target.stat().st_size:
+            errors.append(f'{rel}: empty destination {ref}')
         elif resolved.fragment and target in pages and unquote(resolved.fragment) not in pages[target].ids:
             errors.append(f'{rel}: missing anchor {ref}')
         if tag == 'img' and 'srcset' in attrs:
             for candidate in attrs['srcset'].split(','):
                 image_path = urlsplit(urljoin(url, candidate.strip().split()[0])).path
-                if not (ROOT / unquote(image_path.lstrip('/'))).is_file():
+                variant = ROOT / unquote(image_path.lstrip('/'))
+                if not variant.is_file() or not variant.stat().st_size:
                     errors.append(f'{rel}: missing responsive image {image_path}')
+
+# A 200 response alone does not make an image usable. Catch truncated WebP assets.
+for asset in list((ROOT / 'assets/images').glob('*.webp')) + list((ROOT / 'testimonials').glob('*.webp')):
+    data = asset.read_bytes()
+    if len(data) < 12 or data[:4] != b'RIFF' or data[8:12] != b'WEBP' or int.from_bytes(data[4:8], 'little') + 8 != len(data):
+        errors.append(f'{asset.relative_to(ROOT)}: incomplete WebP image')
 
 sitemap = ET.parse(ROOT / 'sitemap.xml')
 locations = [x.text for x in sitemap.findall('.//{http://www.sitemaps.org/schemas/sitemap/0.9}loc')]
