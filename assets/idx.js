@@ -22,13 +22,24 @@
     image.addEventListener('error',() => image.replaceWith(node('div','Photo unavailable',`${cls} idx-no-photo`)),{once:true});
     return image;
   }
-  function attribution(p) {
+  function attribution(p, showingHref) {
     const box = node('div',undefined,'idx-attribution');
     if (p.idxLogo?.url && https(p.idxLogo.url)) box.append(photo(p.idxLogo.url,'IDX','idx-logo'));
     else if (p.idxLogo?.text) box.append(node('p',p.idxLogo.text));
-    box.append(node('p',`Listing broker: ${p.broker}`));
-    if (p.agent) box.append(node('p',`Listing agent: ${p.agent}`));
-    if (p.attribution) box.append(node('p',p.attribution));
+    const textClass = showingHref ? 'lead' : 'idx-card-meta';
+    if (showingHref) {
+      const listedBy = p.agent ? `${p.agent} of ${p.broker}` : p.broker;
+      const credit = node('p',`This listing is provided courtesy of ${listedBy}. To schedule a showing, `,textClass);
+      const showing = node('a','contact Hannah Keown');
+      showing.href = showingHref;
+      credit.append(showing,', REALTOR® with Pennington Properties.');
+      box.append(credit);
+    } else {
+      box.append(node('p',`Listing broker: ${p.broker}`,textClass));
+    }
+    if (p.attribution && p.attribution.toLowerCase() !== p.broker.toLowerCase()) {
+      box.append(node('p',p.attribution,textClass));
+    }
     box.append(node('p',`MLS #${p.mlsNumber || p.key} · Updated ${date(p.updatedAt)}`));
     return box;
   }
@@ -112,12 +123,13 @@
         if(p.description){const about=node('section',undefined,'idx-detail-panel');about.append(node('h2','About this property'),node('p',p.description,'idx-description'));left.append(about);}
         if(Object.keys(p.features).length){const features=node('section',undefined,'idx-detail-panel'),list=node('dl',undefined,'idx-features');features.append(node('h2','Features & amenities'),list);for(const [key,value] of Object.entries(p.features)){if(!value.length)continue;const item=node('div');item.append(node('dt',key.replace(/([a-z])([A-Z])/g,'$1 $2')),node('dd',value.join(', ')));list.append(item);}left.append(features);}
         const contact=node('section',undefined,'idx-contact');contact.append(node('h2','Interested in this property?'),node('p','Ask Hannah a question or arrange a showing.'),node('p','Hannah Keown, REALTOR®'));
-        const call=node('a','Call 270-589-8376','btn btn-primary');call.href='tel:2705898376';
-        const email=node('a','Request a showing','btn btn-outline');email.href=`mailto:info@hannahkeownhomes.com?subject=${encodeURIComponent('Showing request: MLS #'+p.mlsNumber)}&body=${encodeURIComponent('Hi Hannah, I am interested in this property:\n'+location.href+'\n\nPlease contact me about a showing.\n\nName:\nPhone:\nPreferred date and time:')}`;
-        contact.append(call,email,attribution(p));right.append(contact);
+        const call=node('a','Call 270-589-8376','btn btn-outline');call.href='tel:2705898376';
+        const email=node('a','Request a showing','btn btn-navy');email.href=`mailto:info@hannahkeownhomes.com?subject=${encodeURIComponent('Showing request: MLS #'+p.mlsNumber)}&body=${encodeURIComponent('Hi Hannah, I am interested in this property:\n'+location.href+'\n\nPlease contact me about a showing.\n\nName:\nPhone:\nPreferred date and time:')}`;
+        contact.append(email,call);right.append(contact);
         const links=node('div',undefined,'idx-detail-links');
         if(p.virtualTour&&https(p.virtualTour)){const tour=node('a','View virtual tour');tour.href=p.virtualTour;tour.target='_blank';tour.rel='noopener noreferrer';links.append(tour);}
         if(p.addressAllowed&&p.address){const map=node('a','View location');map.href=`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(p.address+', '+locality(p))}`;map.target='_blank';map.rel='noopener noreferrer';links.append(map);}if(links.childElementCount)left.append(links);
+        left.append(attribution(p,email.href));
         notices([p],data.fetchedAt);details.hidden=false;status.hidden=true;
       }catch(error){failure(status,error,load);}
     }
