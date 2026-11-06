@@ -10,3 +10,17 @@
 .idx-detail-grid>div{min-width:0}.idx-detail-panel,.idx-contact{overflow-wrap:anywhere}
 
 #property-title{font:500 clamp(1.8rem,4vw,2.6rem)/1.2 var(--serif);max-width:100%;overflow-wrap:anywhere}
+
+.idx-form-actions .btn {
+  appearance: none;
+  border: 1px solid #000;
+  color: var(--navy);
+}
+
+.idx-form-actions .btn-primary {
+  background: #bcbcbc;
+}
+
+.idx-form-actions .btn-outline {
+  background: var(--white);
+}
