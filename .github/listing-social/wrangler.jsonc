@@ -1,0 +1,18 @@
+{
+  "name": "hannah-keown-listing-social",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-11-11",
+  "workers_dev": false,
+  "preview_urls": false,
+  "routes": [
+    {
+      "pattern": "https://hannahkeownhomes.com/property.html*",
+      "zone_name": "hannahkeownhomes.com"
+    }
+  ],
+  "observability": {
+    "enabled": true,
+    "logs": { "enabled": true, "head_sampling_rate": 0.05 },
+    "traces": { "enabled": true, "head_sampling_rate": 0.01 }
+  }
+}
