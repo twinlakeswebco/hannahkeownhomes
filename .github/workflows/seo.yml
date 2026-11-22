@@ -11,3 +11,5 @@ jobs:
       - run: node --check assets/idx.js && node --check site.js && node --check resources/guide.js
       - name: Regression-test the IDX Worker and frontend
         run: cd .github/idx-api && npm test
+      - name: Test Cloudflare property route (no deployment)
+        run: node --test .github/property-router/test/*.test.mjs
