@@ -6,6 +6,17 @@
   const date = value => { const d = new Date(value); return Number.isNaN(d.getTime()) ? 'Unavailable' : d.toLocaleString('en-US',{dateStyle:'medium',timeStyle:'short',timeZoneName:undefined}); };
   const specs = p => [p.beds !== null ? `${p.beds} beds` : '',p.baths !== null ? `${p.baths} baths` : '',p.sqft !== null ? `${p.sqft.toLocaleString()} sq ft` : '',p.acres !== null ? `${p.acres.toLocaleString()} acres` : ''].filter(Boolean).join(' · ');
   const locality = p => [p.city,[p.state,p.zip].filter(Boolean).join(' ')].filter(Boolean).join(', ');
+  // The listing key stays in the path so address changes and duplicate addresses cannot break lookup.
+  function propertyPath(p) {
+    const key = String(p.key || '');
+    if (!/^[A-Za-z0-9_-]{1,80}$/.test(key)) return '';
+    const label = p.addressAllowed
+      ? [p.address, p.city, p.state, p.zip].filter(Boolean).join(' ')
+      : 'listing';
+    const slug = label.normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 120) || 'listing';
+    return `/properties/${slug}--id-${key}/`;
+  }
   function https(value) { try { const u = new URL(value); return u.protocol === 'https:' && !u.username && !u.password ? u.href : ''; } catch { return ''; } }
   async function api(path, signal) {
     const base = https(window.HKH_IDX_API);
@@ -80,7 +91,7 @@
         if(current.get('address')&&data.supportsAddressSearch!==true)throw new Error('Address search is temporarily unavailable. Clear the address to search with other filters.');
         status.textContent=data.total===null ? `Showing ${data.listings.length} properties` : `${data.total.toLocaleString()} matching ${data.total===1?'property':'properties'}`;
         for(const p of data.listings){
-          const card=node('a',undefined,'idx-card reveal visible');card.href=`/property.html?id=${encodeURIComponent(p.key)}&search=${encodeURIComponent(current.toString())}`;
+          const card=node('a',undefined,'idx-card reveal visible');card.href=propertyPath(p) + (current.size ? `?search=${encodeURIComponent(current.toString())}` : '');
           card.append(photo(p.photos[0]?.url,p.addressAllowed?`${p.address}, ${p.city}`:'Property photo','idx-card-image'));
           const body=node('div',undefined,'idx-card-body');body.append(node('p',money(p.price),'idx-price'),node('h2',p.address),node('p',locality(p),'idx-card-meta'),node('p',specs(p)||p.type,'idx-card-meta'),attribution(p));card.append(body);grid.append(card);
         }
@@ -97,7 +108,7 @@
     for(const [id,direction] of [['previousPage',-1],['nextPage',1]])byId(id).addEventListener('click',()=>{const p=new URLSearchParams(current);p.set('page',String(page+direction));load(p,'pushState');status.scrollIntoView({block:'center'});});
     window.addEventListener('popstate',()=>{current=new URLSearchParams(location.search);restore();load(current);});restore();load();
   } else {
-    const params=new URLSearchParams(location.search), id=params.get('id')||'', status=byId('propertyStatus'), details=byId('propertyDetails');
+    const params=new URLSearchParams(location.search), pathMatch=location.pathname.match(/^\/properties\/[a-z0-9-]+--id-([A-Za-z0-9_-]{1,80})\/$/), id=pathMatch?.[1]||params.get('id')||'', status=byId('propertyStatus'), details=byId('propertyDetails');
     let back=params.get('search');if(back===null){try{back=sessionStorage.getItem('hkh-search');}catch{}}
     if(back&&back.length<1500)byId('backToSearch').href=`/search.html?${new URLSearchParams(back)}`;
     async function load() {
@@ -106,7 +117,7 @@
         if(!/^[A-Za-z0-9_-]{1,80}$/.test(id))throw new Error('Choose a property from the search results to view its details.');
         const data=await api(`/api/properties/${encodeURIComponent(id)}`),p=data.listing;
         document.title=`${p.addressAllowed?p.address:p.city+' property'} | Hannah Keown Homes`;
-        const canonical=new URL('https://hannahkeownhomes.com/property.html');canonical.searchParams.set('id',p.key);document.querySelector('link[rel="canonical"]').href=canonical.href;
+        const canonical=new URL(propertyPath(p), 'https://hannahkeownhomes.com');document.querySelector('link[rel="canonical"]').href=canonical.href;
         const head=node('div',undefined,'idx-detail-head'),heading=node('div');byId('property-title').textContent=p.address;heading.append(node('p',p.type,'section-eyebrow'));heading.append(node('p',locality(p),'idx-intro'));head.append(heading,node('p',money(p.price),'idx-price'));details.append(head);
         const layout=node('div',undefined,'idx-detail-grid'),left=node('div'),right=node('aside');layout.append(left,right);details.append(layout);
         const gallery=node('div',undefined,'idx-gallery');left.append(gallery);
