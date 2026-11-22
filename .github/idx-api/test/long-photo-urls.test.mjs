@@ -100,7 +100,7 @@ function descendants(root, predicate) {
   return found;
 }
 
-async function render(page, payload) {
+async function render(page, payload, overridePath) {
   const ids = Object.fromEntries([
     'propertySearch', 'searchResults', 'searchStatus', 'pagination',
     'addressSearchField', 'idxNotices', 'previousPage', 'nextPage',
@@ -128,7 +128,7 @@ async function render(page, payload) {
     querySelector: () => canonical
   };
   const location = new URL('https://hannahkeownhomes.com/' +
-    (page === 'search' ? 'search.html' : 'property.html?id=property-123'));
+    (overridePath || (page === 'search' ? 'search.html' : 'property.html?id=property-123')));
   let calls = 0;
   const sandbox = {
     document, location, window: {
@@ -151,7 +151,7 @@ async function render(page, payload) {
       : ids.propertyStatus.hidden === true)) break;
   }
   assert.equal(calls, 1, 'frontend fetched its mock IDX response');
-  return ids;
+  return { ...ids, canonical };
 }
 
 test('search card image src retains a long photo URL', async () => {
@@ -191,4 +191,46 @@ test('gallery main image, thumbnails and next-photo control preserve long URLs',
     next.listeners.click();
     assert.equal(frame.children[0].src, urls[i]);
   }
+});
+
+test('search cards link to address URLs with a stable listing key', async () => {
+  const p = normalize({ ...listing, Media: [] });
+  const ids = await render('search', {
+    listings: [{ ...p, broker: 'Example Broker', idxLogo: { text: 'IDX' } }],
+    page: 1, total: 1, hasNext: false, supportsAddressSearch: true
+  });
+  const cards = descendants(ids.searchResults, el => el.className === 'idx-card reveal visible');
+  assert.equal(cards.length, 1);
+  assert.equal(cards[0].href,
+    '/properties/123-main-st-elizabethtown-ky-42701--id-property-123/');
+});
+
+test('hidden addresses never appear in property URLs', async () => {
+  const p = normalize({ ...listing, InternetAddressDisplayYN: false, Media: [] });
+  const ids = await render('search', {
+    listings: [{ ...p, broker: 'Example Broker', idxLogo: { text: 'IDX' } }],
+    page: 1, total: 1, hasNext: false, supportsAddressSearch: true
+  });
+  const cards = descendants(ids.searchResults, el => el.className === 'idx-card reveal visible');
+  assert.equal(cards[0].href, '/properties/listing--id-property-123/');
+  assert.ok(!cards[0].href.includes('123-main'));
+});
+
+test('address-based property URLs fetch by the existing key and set the canonical', async () => {
+  const p = normalize({ ...listing, Media: [] }, true);
+  const ids = await render('property', {
+    listing: { ...p, broker: 'Example Broker', idxLogo: { text: 'IDX' } }
+  }, 'properties/123-main-st-elizabethtown-ky-42701--id-property-123/');
+  assert.equal(ids.propertyStatus.hidden, true);
+  assert.equal(ids.canonical.href,
+    'https://hannahkeownhomes.com/properties/123-main-st-elizabethtown-ky-42701--id-property-123/');
+});
+
+test('legacy property links retain functionality and canonicalize to the new address', async () => {
+  const p = normalize({ ...listing, Media: [] }, true);
+  const ids = await render('property', {
+    listing: { ...p, broker: 'Example Broker', idxLogo: { text: 'IDX' } }
+  });
+  assert.equal(ids.propertyStatus.hidden, true);
+  assert.match(ids.canonical.href, /\/properties\/123-main-st-elizabethtown-ky-42701--id-property-123\/$/);
 });
